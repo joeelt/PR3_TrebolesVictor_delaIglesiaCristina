@@ -1,7 +1,8 @@
 public class Person {
     public final int WINDOWED = 0;
-    public final int DIVORCED = 0;
-    public final int SINGLE = 0;
+    public final int DIVORCED = 1;
+    public final int MARRIED = 2;
+    public final int SINGLE = 3;
 
     private static int maritalStatus;
     private static String placeOfOrigin;
