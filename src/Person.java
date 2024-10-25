@@ -4,9 +4,9 @@ public class Person {
     public static final int MARRIED = 2;
     public static final int SINGLE = 3;
 
-    private static int maritalStatus;
-    private static String placeOfOrigin;
-    private static String name;
+    private int maritalStatus;
+    private String placeOfOrigin;
+    private String name;
 
     public Person(String name, String placeOfOrigin, int maritalStatus) {
         this.name = name;
@@ -21,11 +21,15 @@ public class Person {
         this.maritalStatus = Integer.parseInt(info[2]);
     }
 
-    public static String getPlaceOfOrigin() {
+    public String getName() {
+        return name;
+    }
+
+    public String getPlaceOfOrigin() {
         return placeOfOrigin;
     }
 
-    public static int getMaritalStatus() {
+    public int getMaritalStatus() {
         return maritalStatus;
     }
 
