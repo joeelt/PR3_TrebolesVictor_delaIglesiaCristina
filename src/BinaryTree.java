@@ -1,4 +1,5 @@
 import java.io.*;
+import java.rmi.RemoteException;
 
 public class BinaryTree {
     protected class NodeA{
@@ -25,8 +26,23 @@ public class BinaryTree {
             }
         }
 
-        private boolean addNodeRecursive(Person unaPersona, String level) {
-            return false;
+        private boolean addNodeRecursive(Person unaPersona, String level) { // TODO: hacer recursivo
+            if(level.charAt(0) == 'R') {
+                if(level.length() == 1) {
+                    this.right = new NodeA(unaPersona);
+                } else if(level.charAt(1) == 'R') {
+                    this.right.right.info = unaPersona;
+                } else if(level.charAt(1) == 'L') {
+                    this.right.left.info = unaPersona;
+                }
+            } else if(level.charAt(0) == 'L') {
+                if(level.charAt(1) == 'R') {
+                    this.left.right.info = unaPersona;
+                } else if(level.charAt(1) == 'L') {
+                    this.left.left.info = unaPersona;
+                }
+            }
+            return true;
         }
 
         private void displayTreeRecursive(int level) {
@@ -82,6 +98,11 @@ public class BinaryTree {
     public void preorderSave() {
         try {
             BufferedWriter buw = new BufferedWriter(new FileWriter(root.info.getName()));
+            if(root == null) {
+                throw new RemoteException("L'arbre esta buit");
+            } else {
+                root.preorderSaveRecursive(buw);
+            }
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("File not found");
@@ -90,18 +111,45 @@ public class BinaryTree {
     }
 
     public  boolean isFrom(String place) {
+        if(root == null) {
+            return false;
+        } else if(root.info.getPlaceOfOrigin().equals(place)) {
+            return true;
+        }
         return false;
     }
 
     public boolean isDescentFrom(String place) {
-        return false;
+        if(root == null) {
+            return false;
+        } else {
+            return root.isDescentFromRecursive(place);
+        }
     }
 
     public int howManyParents() {
-        return 0;
+        if(root == null) {
+            return 0;
+        } else if(root.left == null && root.right == null) {
+            return 0;
+        } else if(root.left != null && root.right != null) {
+            return 2;
+        } else {
+            return 1;
+        }
+    }
+
+    public int HowManyGrandParents() {
+        if(root == null) {
+            return 0;
+        } else {
+            return root.countNodesRecursive();
+        }
     }
 
     public boolean marriedParents() {
-        return false;
+        if(root == null) {
+            return false;
+        } else return root.left.info.getMaritalStatus() == 2 && root.right.info.getMaritalStatus() == 2;
     }
 }
