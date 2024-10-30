@@ -73,7 +73,9 @@ public class BinaryTree {
             }
         }
 
-        private void removePersonRecursive(String name) {}
+        private void removePersonRecursive(String name) {
+
+        }
 
         private boolean isDescentFromRecursive(String place) {
          return false;
