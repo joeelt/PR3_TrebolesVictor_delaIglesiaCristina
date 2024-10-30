@@ -18,35 +18,59 @@ public class BinaryTree {
         }
 
         private void preorderSaveRecursive(BufferedWriter buw) {
-            if (left != null) {
-                left.preorderSaveRecursive(buw);
+            try {
+                buw.newLine();
+                buw.write(this.info.toString());
+                if(this.left == null) {
+                    buw.write(";");
+                } else {
+                    buw.newLine();
+                    this.left.preorderSaveRecursive(buw);
+                }
+                if(this.right == null) {
+                    buw.write(" ;");
+                } else {
+                    buw.newLine();
+                    this.right.preorderSaveRecursive(buw);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            if (right != null) {
-                right.preorderSaveRecursive(buw);
-            }
+
         }
 
         private boolean addNodeRecursive(Person unaPersona, String level) { // TODO: hacer recursivo
-            if(level.charAt(0) == 'R') {
-                if(level.length() == 1) {
-                    this.right = new NodeA(unaPersona);
-                } else if(level.charAt(1) == 'R') {
-                    this.right.right.info = unaPersona;
-                } else if(level.charAt(1) == 'L') {
-                    this.right.left.info = unaPersona;
+            if(level.isEmpty()) {
+                this.info = unaPersona;
+                return true;
+            } else if(level.charAt(0) == 'R') {
+                if(this.right == null) {
+                    this.right = new NodeA(null);
                 }
+               this.right.addNodeRecursive(unaPersona, level.substring(1));
+               return true;
             } else if(level.charAt(0) == 'L') {
-                if(level.charAt(1) == 'R') {
-                    this.left.right.info = unaPersona;
-                } else if(level.charAt(1) == 'L') {
-                    this.left.left.info = unaPersona;
+                if(this.left == null) {
+                    this.left = new NodeA(null);
                 }
+                this.left.addNodeRecursive(unaPersona, level.substring(1));
+                return true;
             }
-            return true;
+            return false;
         }
 
         private void displayTreeRecursive(int level) {
-
+            if(level == 0) {
+                System.out.println(this.info);
+            }
+            if(this.right != null) {
+                System.out.println(this.right.info);
+                this.right.displayTreeRecursive(level + 1);
+            }
+            if(this.left != null) {
+                System.out.println(this.left.info);
+                this.left.displayTreeRecursive(level + 1);
+            }
         }
 
         private void removePersonRecursive(String name) {}
@@ -92,6 +116,7 @@ public class BinaryTree {
     }
 
     public void displayTree() {
+        System.out.println("Arbre binari estructura:");
         root.displayTreeRecursive(0);
     }
 
@@ -110,13 +135,15 @@ public class BinaryTree {
 
     }
 
+    public void removePerson(String name) {
+        root.removePersonRecursive(name);
+
+    }
+
     public  boolean isFrom(String place) {
         if(root == null) {
             return false;
-        } else if(root.info.getPlaceOfOrigin().equals(place)) {
-            return true;
-        }
-        return false;
+        } else return root.info.getPlaceOfOrigin().equals(place);
     }
 
     public boolean isDescentFrom(String place) {

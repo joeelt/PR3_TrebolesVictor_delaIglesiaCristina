@@ -48,8 +48,7 @@ public class Person {
         }
     }
 
-    @Override
     public String toString() {
-        return super.toString();
+        return "Name: " + name + ", place of Origin: " + placeOfOrigin + ", marital status: " + maritalStatus;
     }
 }
