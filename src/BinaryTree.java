@@ -75,6 +75,7 @@ public class BinaryTree {
 
         private void removePersonRecursive(String name) {
 
+
         }
 
         private boolean isDescentFromRecursive(String place) {
@@ -114,6 +115,10 @@ public class BinaryTree {
     }
 
     public boolean addNode(Person unaPersona, String level) {
+        if(root == null) {
+            root = new NodeA(unaPersona);
+            return true;
+        }
         return root.addNodeRecursive(unaPersona, level);
     }
 

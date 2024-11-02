@@ -1,5 +1,5 @@
 public class Person {
-    public static final int WINDOWED = 0;
+    public static final int WIDOWED = 0;
     public static final int DIVORCED = 1;
     public static final int MARRIED = 2;
     public static final int SINGLE = 3;
@@ -35,7 +35,7 @@ public class Person {
 
     public String getMaritalStatusString() {
         switch (maritalStatus){
-            case WINDOWED:
+            case WIDOWED:
                 return "Windowed";
             case DIVORCED:
                 return "Divorced";

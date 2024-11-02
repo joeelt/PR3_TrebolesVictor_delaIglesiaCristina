@@ -27,7 +27,6 @@ public class Students {
         while (aux.next != null && name.compareTo(aux.info.getName().toLowerCase()) > 0){
             prev = aux;
             aux = aux.next;
-
             if (prev == null){
                 first = new Node(nouEstudiant);
                 first.next = aux;
@@ -45,32 +44,29 @@ public class Students {
         while (aux != null && !aux.info.getName().equalsIgnoreCase(name)){
             prev = aux;
             aux = aux.next;
-            if (aux != null){
-                if (prev == null){
-                    first = aux.next;
-                } else {
-                    prev.next = aux.next;
-                }
-            }
         }
 
+        if (aux != null){
+            if (prev == null){
+                first = aux.next;
+            } else {
+                prev.next = aux.next;
+            }
+        }
 
     }
 
     public BinaryTree getStudent(String name){
-
         Node aux = first;
-
         while (aux != null && !aux.info.getName().equalsIgnoreCase(name)){
             aux = aux.next;
-            if (aux != null){
-                return aux.info;
-            } else {
-                return null;
-            }
-
         }
-        return null;
+
+        if (aux != null){
+            return aux.info;
+        } else {
+            return null;
+        }
     }
 
     public ArrayList<String> getAllStudents(){
