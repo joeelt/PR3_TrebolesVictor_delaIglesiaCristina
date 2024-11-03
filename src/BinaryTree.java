@@ -47,57 +47,78 @@ public class BinaryTree {
                 if(this.right == null) {
                     this.right = new NodeA(null);
                 }
-               this.right.addNodeRecursive(unaPersona, level.substring(1));
-               return true;
+               return this.right.addNodeRecursive(unaPersona, level.substring(1));
             } else if(level.charAt(0) == 'L') {
                 if(this.left == null) {
                     this.left = new NodeA(null);
                 }
-                this.left.addNodeRecursive(unaPersona, level.substring(1));
-                return true;
+                return this.left.addNodeRecursive(unaPersona, level.substring(1));
             }
             return false;
         }
 
         private void displayTreeRecursive(int level) {
+            int space;
             if(level == 0) {
-                System.out.println(this.info);
+                System.out.println(this.info.getName());
             }
             if(this.right != null) {
-                System.out.println(this.right.info);
+                if(this.right.info != null) {
+                    space = 0;
+                    while (level >= space) {
+                        space++;
+                        System.out.print("   ");
+                    }
+                    System.out.println(this.right.info.getName());
+                } else {
+                    System.out.println();
+                }
                 this.right.displayTreeRecursive(level + 1);
             }
             if(this.left != null) {
-                System.out.println(this.left.info);
+                if(this.left.info != null) {
+                    space = 0;
+                    while (level >= space) {
+                        space++;
+                        System.out.print("   ");
+                    }
+                    System.out.println(this.left.info.getName());
+                } else {
+                    System.out.println();
+                }
                 this.left.displayTreeRecursive(level + 1);
             }
         }
 
-        private boolean removePersonRecursive(String name) {
-            if(this.left != null) {
-                this.left.removePersonRecursive(name);
-            } else if(this.right != null) {
-                this.right.removePersonRecursive(name);
-            }
-            if(this.info.getName().equals(name)) {
-                this.info = null;
-                return true;
-            }
-            return false;
-
-        }
-
-        private boolean isDescentFromRecursive(String place) {
-            if(this.info.getPlaceOfOrigin().equals(place)) {
-                return true;
-            } else {
-                if(this.left != null) {
-                    this.left.isDescentFromRecursive(place);
-                } else {
-                    this.right.isDescentFromRecursive(place);
+        private boolean removePersonRecursive(String name)  {
+            if(name != null) {
+                if (this.info.getName().equals(name)) {
+                    this.info = null;
+                    return true;
+                }
+                if (this.left != null) {
+                    this.left.removePersonRecursive(name);
+                }
+                if (this.right != null) {
+                    this.right.removePersonRecursive(name);
                 }
                 return false;
             }
+            return false;
+        }
+
+        private boolean isDescentFromRecursive(String place) {
+            if(this.info != null && this.info.getPlaceOfOrigin().equals(place)) {
+                return true;
+            } else {
+                if(this.left != null) {
+                    return this.left.isDescentFromRecursive(place);
+                }
+                if(this.right != null) {
+                    return this.right.isDescentFromRecursive(place);
+                }
+            }
+            return false;
         }
 
         private int countNodesRecursive() {
@@ -105,7 +126,8 @@ public class BinaryTree {
             if(this.info != null) {
                 if(this.left != null) {
                     l = this.left.countNodesRecursive();
-                } else {
+                }
+                if (this.right != null){
                     r = this.right.countNodesRecursive();
                 }
             }
@@ -198,15 +220,16 @@ public class BinaryTree {
         }
     }
 
-    public int HowManyGrandParents() {
+    public int howManyGrandParents() {
         if(root == null) {
             return 0;
         } else {
-            return root.countNodesRecursive();
+            return root.countNodesRecursive()-1-howManyParents();
         }
     }
 
     public boolean marriedParents() {
+
         if(root == null) {
             return false;
         } else return root.left.info.getMaritalStatus() == 2 && root.right.info.getMaritalStatus() == 2;

@@ -19,29 +19,35 @@ public class Students {
     }
 
     public void addStudent(BinaryTree nouEstudiant){
-        Node aux = new Node(nouEstudiant);
-        Node prev = first;
+        Node aux = this.first;
+        Node nou;
 
         String name = nouEstudiant.getName().toLowerCase();
 
-        while (aux.next != null && name.compareTo(aux.info.getName().toLowerCase()) > 0){
-            prev = aux;
-            aux = aux.next;
-            if (prev == null){
-                first = new Node(nouEstudiant);
-                first.next = aux;
-            } else {
-                prev.next = new Node(nouEstudiant);
-                prev.next.next = aux;
+        if(aux == null) {
+           this.first = new Node(nouEstudiant);
+        } else {
+            while (aux.next != null){
+                if (aux.next.info.getName().toLowerCase().compareTo(name) > 0){
+                    nou = new Node(nouEstudiant);
+                    nou.next = aux.next;
+                    aux.next = nou;
+                    return;
+                } else if(aux.next.info.getName().toLowerCase().compareTo(name) == 0) {
+                    throw new IllegalArgumentException("L'estudiant ja existeix");
+                }
+                aux = aux.next;
             }
+            aux.next = new Node(nouEstudiant);
         }
+
     }
 
     public void removeStudent(String name){
-        Node aux = first;
+        Node aux = this.first;
         Node prev = null;
 
-        while (aux != null && !aux.info.getName().equalsIgnoreCase(name)){
+        while(aux != null && !aux.info.getName().equalsIgnoreCase(name)){
             prev = aux;
             aux = aux.next;
         }
@@ -53,6 +59,7 @@ public class Students {
                 prev.next = aux.next;
             }
         }
+
 
     }
 

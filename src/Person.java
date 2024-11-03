@@ -49,6 +49,6 @@ public class Person {
     }
 
     public String toString() {
-        return "Name: " + name + ", place of Origin: " + placeOfOrigin + ", marital status: " + maritalStatus;
+        return "Name: " + name + ", place of Origin: " + placeOfOrigin + ", marital status: " + getMaritalStatusString();
     }
 }
