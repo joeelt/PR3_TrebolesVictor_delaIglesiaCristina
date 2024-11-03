@@ -39,7 +39,7 @@ public class BinaryTree {
 
         }
 
-        private boolean addNodeRecursive(Person unaPersona, String level) { // TODO: hacer recursivo
+        private boolean addNodeRecursive(Person unaPersona, String level) {
             if(level.isEmpty()) {
                 this.info = unaPersona;
                 return true;
@@ -73,17 +73,43 @@ public class BinaryTree {
             }
         }
 
-        private void removePersonRecursive(String name) {
-
+        private boolean removePersonRecursive(String name) {
+            if(this.left != null) {
+                this.left.removePersonRecursive(name);
+            } else if(this.right != null) {
+                this.right.removePersonRecursive(name);
+            }
+            if(this.info.getName().equals(name)) {
+                this.info = null;
+                return true;
+            }
+            return false;
 
         }
 
         private boolean isDescentFromRecursive(String place) {
-         return false;
+            if(this.info.getPlaceOfOrigin().equals(place)) {
+                return true;
+            } else {
+                if(this.left != null) {
+                    this.left.isDescentFromRecursive(place);
+                } else {
+                    this.right.isDescentFromRecursive(place);
+                }
+                return false;
+            }
         }
 
         private int countNodesRecursive() {
-            return 0;
+            int l = 0, r = 0;
+            if(this.info != null) {
+                if(this.left != null) {
+                    l = this.left.countNodesRecursive();
+                } else {
+                    r = this.right.countNodesRecursive();
+                }
+            }
+            return 1 + l + r;
         }
     }
 
@@ -142,9 +168,8 @@ public class BinaryTree {
 
     }
 
-    public void removePerson(String name) {
-        root.removePersonRecursive(name);
-
+    public boolean removePerson(String name) {
+       return root.removePersonRecursive(name);
     }
 
     public  boolean isFrom(String place) {
