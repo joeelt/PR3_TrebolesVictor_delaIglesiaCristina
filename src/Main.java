@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
     public static void main(String[] args) {
+        //Students students = readAllStudents("Files");
         Students students = exemples();
         boolean sortir = false;
 
@@ -167,7 +168,7 @@ public class Main {
     private static void showStudentFamily(Students studentsList) {
 
         System.out.println("Introdueix el nom de l'estudiant:");
-        String name = scanner.nextLine();
+        String name = scanner.next();
 
         BinaryTree studentTree = studentsList.getStudent(name);
         if (studentTree != null){
@@ -196,7 +197,7 @@ public class Main {
     private static void modifyStudent(Students studentsList) {
 
         System.out.println("Introdueix el nom de l'estudiant:");
-        String name = scanner.nextLine();
+        String name = scanner.next();
         BinaryTree studentTree = studentsList.getStudent(name);
         if (studentTree != null) {
             System.out.println("1. Afegir membre de la família.");
@@ -233,13 +234,6 @@ public class Main {
     }
 
     private static void mostrarInforme(Students studentsList) {
-
-        System.out.println("Introdueix la ciutat on ha nascut l'estudiant:");
-        String studentCity = scanner.next();
-        System.out.println("Introdueix la ciutat de procedència de la família:");
-        String familyCity = scanner.next();
-
-        ArrayList<String> studentNames = studentsList.getAllStudents();
         int numAlumnes = 0;
         int countFromStudentCity = 0;
         int countFromFamilyCity = 0;
@@ -248,12 +242,40 @@ public class Main {
         int totalGrandParents = 0;
         int marriedParents = 0;
 
+        System.out.println("Introdueix la ciutat on ha nascut l'estudiant:");
+        String studentCity = scanner.next();
+        System.out.println("Introdueix la ciutat de procedència de la família:");
+        String familyCity = scanner.next();
+
+        ArrayList<String> studentNames = studentsList.getAllStudents();
+
+        for (String name : studentNames){
+            numAlumnes++;
+            BinaryTree tree = studentsList.getStudent(name);
+            if(tree.isFrom(studentCity)) {
+                countFromStudentCity++;
+            }
+            if(tree.isDescentFrom(familyCity)) {
+                countFromFamilyCity++;
+            }
+            if(tree.howManyParents() == 1) {
+                unicProgenitor++;
+            }
+
+            if(tree.howManyGrandParents() >= 2) {
+                totalGrandParents++;
+            }
+            if(tree.marriedParents()) {
+                marriedParents++;
+            }
+        }
+
 
         System.out.println("Nombre d'alumnes total: " + numAlumnes);
-        System.out.println("Hi ha" + countFromStudentCity + "alumnes de " + studentCity);
-        System.out.println("Hi ha" + countFromFamilyCity + " alumnes descendents de " + familyCity);
+        System.out.println("Hi ha " + countFromStudentCity + " alumnes de " + studentCity);
+        System.out.println("Hi ha " + countFromFamilyCity + " alumnes descendents de " + familyCity);
         System.out.println("Hi ha " + unicProgenitor + " alumnes amb un únic progenitor.");
-        System.out.println("Hi ha" + marriedParents + " alumnes amb progenitors no casats.");
+        System.out.println("Hi ha " + marriedParents + " alumnes amb progenitors no casats.");
         System.out.println("Hi ha " + totalGrandParents + " alumnes amb dos o més avis o àvies.");
     }
 }

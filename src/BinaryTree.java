@@ -159,7 +159,44 @@ public class BinaryTree {
     }
 
     private NodeA preorderLoad(BufferedReader bur) {
-        return null;
+        NodeA nou = new NodeA(null);
+        NodeA aux = nou;
+        String[] s;
+        int level = 0;
+        boolean r = false;
+        try {
+            String line = bur.readLine();
+            while (line != null) {
+                if(level == 0) {
+                    aux.info = new Person(line);
+                    line = bur.readLine();
+                    level++;
+                    aux = aux.left;
+                } else {
+                    s = line.split(";");
+                    if(s.length == 1) {
+                        aux.info = new Person(line);
+                        line = bur.readLine();
+                    } else if(s.length == 2) {
+                        aux.right.info = null;
+                    } else if(s.length == 3) {
+                        aux.right.info = null;
+                        aux.left.info = null;
+                    }
+                    if(r) {
+                        r = false;
+                        aux = aux.right;
+                    } else {
+                        r = true;
+                        aux = aux.left;
+                    }
+                }
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return nou;
     }
 
     public boolean addNode(Person unaPersona, String level) {
@@ -232,6 +269,6 @@ public class BinaryTree {
 
         if(root == null) {
             return false;
-        } else return root.left.info.getMaritalStatus() == 2 && root.right.info.getMaritalStatus() == 2;
+        } else return root.left != null && root.right != null && root.left.info.getMaritalStatus() == 2 && root.right.info.getMaritalStatus() == 2;
     }
 }

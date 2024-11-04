@@ -80,6 +80,10 @@ public class Students {
         ArrayList<String> students = new ArrayList<String>();
         Node aux = first;
 
+        if(first == null){
+            return null;
+        }
+
         while (aux != null){
             students.add(aux.info.getName());
             aux = aux.next;

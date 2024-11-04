@@ -16,9 +16,23 @@ public class Person {
 
     public Person(String formattedString){
         String[] info = formattedString.split(", |: ");
-        this.name = info[0];
-        this.placeOfOrigin = info[1];
-        this.maritalStatus = Integer.parseInt(info[2]);
+        this.name = info[1].substring(1);
+        this.placeOfOrigin = info[3].substring(1);
+        String maritalStatus = info[5].substring(1);
+        switch(maritalStatus) {
+            case "Windowed":
+                this.maritalStatus = WIDOWED;
+                break;
+            case "Married":
+                this.maritalStatus = MARRIED;
+                break;
+            case "Divorced":
+                this.maritalStatus = DIVORCED;
+                break;
+            case "Single":
+                this.maritalStatus = SINGLE;
+                break;
+        }
     }
 
     public String getName() {
