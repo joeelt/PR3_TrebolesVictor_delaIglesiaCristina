@@ -158,43 +158,23 @@ public class BinaryTree {
         return root.info.getName();
     }
 
-    private NodeA preorderLoad(BufferedReader bur) {
+    private NodeA preorderLoad(BufferedReader bur) throws IOException {
         NodeA nou = new NodeA(null);
-        NodeA aux = nou;
         String[] s;
-        int level = 0;
-        boolean r = false;
-        try {
-            String line = bur.readLine();
-            while (line != null) {
-                if(level == 0) {
-                    aux.info = new Person(line);
-                    line = bur.readLine();
-                    level++;
-                    aux = aux.left;
-                } else {
-                    s = line.split(";");
-                    if(s.length == 1) {
-                        aux.info = new Person(line);
-                        line = bur.readLine();
-                    } else if(s.length == 2) {
-                        aux.right.info = null;
-                    } else if(s.length == 3) {
-                        aux.right.info = null;
-                        aux.left.info = null;
-                    }
-                    if(r) {
-                        r = false;
-                        aux = aux.right;
-                    } else {
-                        r = true;
-                        aux = aux.left;
-                    }
-                }
+        String line = bur.readLine();
+        if(!line.equals(" ")) {
+            s = line.split(";");
+            nou.info = new Person(s[0]);
 
+            if(s.length == 1) {
+                nou.right = preorderLoad(bur);
+                nou.left = preorderLoad(bur);
+            } else if(s.length == 2) {
+                nou.left = preorderLoad(bur);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        }
+        else {
+            nou = preorderLoad(bur);
         }
         return nou;
     }
@@ -241,7 +221,7 @@ public class BinaryTree {
         if(root == null) {
             return false;
         } else {
-            return root.isDescentFromRecursive(place);
+            return root.left != null && root.left.isDescentFromRecursive(place) || root.right != null && root.right.isDescentFromRecursive(place);
         }
     }
 

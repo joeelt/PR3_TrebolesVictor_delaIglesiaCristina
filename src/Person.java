@@ -16,9 +16,9 @@ public class Person {
 
     public Person(String formattedString){
         String[] info = formattedString.split(", |: ");
-        this.name = info[1].substring(1);
-        this.placeOfOrigin = info[3].substring(1);
-        String maritalStatus = info[5].substring(1);
+        this.name = info[1];
+        this.placeOfOrigin = info[3];
+        String maritalStatus = info[5];
         switch(maritalStatus) {
             case "Windowed":
                 this.maritalStatus = WIDOWED;

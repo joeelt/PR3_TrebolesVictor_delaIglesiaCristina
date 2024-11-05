@@ -9,6 +9,8 @@ public class Main {
     public static void main(String[] args) {
         //Students students = readAllStudents("Files");
         Students students = exemples();
+        //BinaryTree tree = new BinaryTree("Files/Alex.txt");
+        //tree.displayTree();
         boolean sortir = false;
 
         while (!sortir) {
