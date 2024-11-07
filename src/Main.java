@@ -1,4 +1,4 @@
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -6,11 +6,9 @@ import java.util.Scanner;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
-    public static void main(String[] args) {
-        //Students students = readAllStudents("Files");
-        Students students = exemples();
-        //BinaryTree tree = new BinaryTree("Files/Alex.txt");
-        //tree.displayTree();
+    public static void main(String[] args) throws IOException {
+        String folderPath = "Files";
+        Students students = readAllStudents(folderPath);
         boolean sortir = false;
 
         while (!sortir) {
@@ -45,6 +43,7 @@ public class Main {
                     break;
                 case 6:
                     saveAllStudents(students);
+                    sortir = true;
                     break;
                 default:
                     System.out.println("Opció incorrecta");
@@ -61,6 +60,7 @@ public class Main {
         if (listFiles != null){
             for (File file : listFiles){
                 if (file.isFile() && file.getName().endsWith(".txt")){
+                    System.out.println("Alumne carregat des del fitxer: " + file.getName());
                     BinaryTree tree = new BinaryTree(file.getPath());
                     students.addStudent(tree);
                 }
@@ -69,15 +69,25 @@ public class Main {
         return students;
     }
 
-    private static void saveAllStudents(Students studentsList) {
+    private static void saveAllStudents(Students studentsList) throws IOException {
+       String folderPath = "Files";
+       File file = new File(folderPath);
 
-        ArrayList<String> studentsNames = studentsList.getAllStudents();
-        for (String name : studentsNames){
-            BinaryTree studentTree = studentsList.getStudent(name);
-            studentTree.preorderSave();
-        }
+         if (!file.exists()) {
+              file.mkdir();
+         }
 
+         for (String name : studentsList.getAllStudents()){
+             BinaryTree tree = studentsList.getStudent(name);
+
+             if (tree != null){
+                 tree.preorderSave();
+             } else {
+                 System.out.println("No s'ha pogut guardar l'alumne: " + name);
+             }
+         }
     }
+
 
     private static void displayAllStudentsNames(Students studentsList) {
 
@@ -221,8 +231,12 @@ public class Main {
                     break;
                 case 2:
                     System.out.println("Introdueix el nom del membre a eliminar:");
-                    String memberNameToRemove = scanner.nextLine();
-                    studentTree.removePerson(memberNameToRemove);
+                    String memberNameToRemove = scanner.next();
+                    if (studentTree.removePerson(memberNameToRemove)){
+                        System.out.println("Eliminat correctament");
+                    } else {
+                        System.out.println("No s'ha pogut eliminar.");
+                    }
                     break;
                 default:
                     System.out.println("Opció incorrecta.");
@@ -239,7 +253,6 @@ public class Main {
         int numAlumnes = 0;
         int countFromStudentCity = 0;
         int countFromFamilyCity = 0;
-        int totalParents = 0;
         int unicProgenitor = 0;
         int totalGrandParents = 0;
         int marriedParents = 0;
@@ -263,7 +276,7 @@ public class Main {
             if(tree.howManyParents() == 1) {
                 unicProgenitor++;
             }
-
+            System.out.println(tree.howManyGrandParents());
             if(tree.howManyGrandParents() >= 2) {
                 totalGrandParents++;
             }

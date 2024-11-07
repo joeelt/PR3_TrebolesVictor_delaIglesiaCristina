@@ -19,25 +19,33 @@ public class BinaryTree {
 
         private void preorderSaveRecursive(BufferedWriter buw) {
             try {
-                buw.newLine();
-                buw.write(this.info.toString());
-                if(this.left == null) {
-                    buw.write(";");
-                } else {
+                String p = "";
+                if (this.info != null) {
+                    if(this.right == null && this.left == null) {
+                        p = "; ; ";
+                    } else if(this.right == null || this.left == null) {
+                        p = "; ";
+                    }
+
+                    buw.write(this.info.toString() + p);
                     buw.newLine();
+                } else {
+                    buw.write(" ");
+                    buw.newLine();
+                }
+
+                if (this.left != null) {
                     this.left.preorderSaveRecursive(buw);
                 }
-                if(this.right == null) {
-                    buw.write(" ;");
-                } else {
-                    buw.newLine();
+
+                if (this.right != null) {
                     this.right.preorderSaveRecursive(buw);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
+
 
         private boolean addNodeRecursive(Person unaPersona, String level) {
             if(level.isEmpty()) {
@@ -62,31 +70,32 @@ public class BinaryTree {
             if(level == 0) {
                 System.out.println(this.info.getName());
             }
-            if(this.right != null) {
-                if(this.right.info != null) {
-                    space = 0;
-                    while (level >= space) {
-                        space++;
-                        System.out.print("   ");
-                    }
-                    System.out.println(this.right.info.getName());
-                } else {
-                    System.out.println();
-                }
-                this.right.displayTreeRecursive(level + 1);
-            }
             if(this.left != null) {
+                space = 0;
+                while (level >= space) {
+                    space++;
+                    System.out.print("\t\t");
+                }
                 if(this.left.info != null) {
-                    space = 0;
-                    while (level >= space) {
-                        space++;
-                        System.out.print("   ");
-                    }
                     System.out.println(this.left.info.getName());
                 } else {
-                    System.out.println();
+                    System.out.println("*dead");
                 }
                 this.left.displayTreeRecursive(level + 1);
+            }
+            if(this.right != null) {
+                space = 0;
+                while (level >= space) {
+                    space++;
+                    System.out.print("\t\t");
+                }
+                if(this.right.info != null) {
+
+                    System.out.println(this.right.info.getName());
+                } else {
+                    System.out.println("*dead");
+                }
+                this.right.displayTreeRecursive(level + 1);
             }
         }
 
@@ -111,14 +120,8 @@ public class BinaryTree {
             if(this.info != null && this.info.getPlaceOfOrigin().equals(place)) {
                 return true;
             } else {
-                if(this.left != null) {
-                    return this.left.isDescentFromRecursive(place);
-                }
-                if(this.right != null) {
-                    return this.right.isDescentFromRecursive(place);
-                }
+                return this.left != null && this.left.isDescentFromRecursive(place) || this.right != null && this.right.isDescentFromRecursive(place);
             }
-            return false;
         }
 
         private int countNodesRecursive() {
@@ -145,10 +148,12 @@ public class BinaryTree {
         try {
             BufferedReader bur = new BufferedReader(new FileReader(filename));
             root = preorderLoad(bur);
+            displayTree();
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
             System.out.println("File not found");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
 
@@ -164,17 +169,22 @@ public class BinaryTree {
         String line = bur.readLine();
         if(!line.equals(" ")) {
             s = line.split(";");
-            nou.info = new Person(s[0]);
+            if(!s[0].equals(" ") ){
+                nou.info = new Person(s[0]);
+            } else {
+                nou.info = null;
+            }
 
             if(s.length == 1) {
-                nou.right = preorderLoad(bur);
                 nou.left = preorderLoad(bur);
+                nou.right = preorderLoad(bur);
             } else if(s.length == 2) {
                 nou.left = preorderLoad(bur);
             }
-        }
-        else {
-            nou = preorderLoad(bur);
+        } else {
+            nou.info = null;
+            nou.left = preorderLoad(bur);
+            nou.right = preorderLoad(bur);
         }
         return nou;
     }
@@ -193,18 +203,18 @@ public class BinaryTree {
     }
 
     public void preorderSave() {
-        try {
-            BufferedWriter buw = new BufferedWriter(new FileWriter(root.info.getName()));
-            if(root == null) {
-                throw new RemoteException("L'arbre esta buit");
-            } else {
-                root.preorderSaveRecursive(buw);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("File not found");
+        if (root == null) {
+            System.out.println("L'arbre està buit");
+            return;
         }
 
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Files/" + root.info.getName() + ".txt"))) {
+            root.preorderSaveRecursive(writer);  // Llamada para guardar la estructura del árbol
+            System.out.println("Alumne guardat correctament: " + root.info.getName());
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error al guardar el fitxer de l'estudiant: " + root.info.getName());
+        }
     }
 
     public boolean removePerson(String name) {
@@ -226,14 +236,17 @@ public class BinaryTree {
     }
 
     public int howManyParents() {
-        if(root == null) {
+        if(root == null || root.left == null && root.right == null) {
             return 0;
-        } else if(root.left == null && root.right == null) {
-            return 0;
-        } else if(root.left != null && root.right != null) {
-            return 2;
         } else {
-            return 1;
+            if((root.left == null || root.left.info == null) && (root.right == null || root.right.info == null)) {
+                return 0;
+            } else if(root.left != null && root.left.info != null && root.right != null && root.right.info != null) {
+                return 2;
+            } else {
+
+                return 1;
+            }
         }
     }
 
