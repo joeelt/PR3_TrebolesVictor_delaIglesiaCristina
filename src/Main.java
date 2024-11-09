@@ -8,6 +8,7 @@ public class Main {
     private static final Scanner scanner = new Scanner(System.in);
     public static void main(String[] args) throws IOException {
         String folderPath = "Files";
+        //Students students = exemples();
         Students students = readAllStudents(folderPath);
         boolean sortir = false;
 
@@ -52,6 +53,13 @@ public class Main {
         }
 
     }
+
+    //private static void testRemoveStudents(Students students) {
+    //System.out.println("Nom estudiant: ");
+    //String nom = scanner.next();
+    //students.removeStudent(nom);
+
+    //}
 
     private static Students readAllStudents(String folderPath) {
         Students students = new Students();

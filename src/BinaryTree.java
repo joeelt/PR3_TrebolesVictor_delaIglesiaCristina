@@ -120,7 +120,8 @@ public class BinaryTree {
             if(this.info != null && this.info.getPlaceOfOrigin().equals(place)) {
                 return true;
             } else {
-                return this.left != null && this.left.isDescentFromRecursive(place) || this.right != null && this.right.isDescentFromRecursive(place);
+                return this.left != null && this.left.isDescentFromRecursive(place)
+                        || this.right != null && this.right.isDescentFromRecursive(place);
             }
         }
 
