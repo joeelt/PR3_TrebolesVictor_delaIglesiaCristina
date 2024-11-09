@@ -120,7 +120,8 @@ public class BinaryTree {
             if(this.info != null && this.info.getPlaceOfOrigin().equals(place)) {
                 return true;
             } else {
-                return this.left != null && this.left.isDescentFromRecursive(place) || this.right != null && this.right.isDescentFromRecursive(place);
+                return this.left != null && this.left.isDescentFromRecursive(place)
+                        || this.right != null && this.right.isDescentFromRecursive(place);
             }
         }
 
@@ -212,7 +213,6 @@ public class BinaryTree {
             root.preorderSaveRecursive(writer);  // Llamada para guardar la estructura del árbol
             System.out.println("Alumne guardat correctament: " + root.info.getName());
         } catch (IOException e) {
-            e.printStackTrace();
             System.out.println("Error al guardar el fitxer de l'estudiant: " + root.info.getName());
         }
     }
@@ -231,7 +231,8 @@ public class BinaryTree {
         if(root == null) {
             return false;
         } else {
-            return root.left != null && root.left.isDescentFromRecursive(place) || root.right != null && root.right.isDescentFromRecursive(place);
+            return root.left != null && root.left.isDescentFromRecursive(place)
+                    || root.right != null && root.right.isDescentFromRecursive(place);
         }
     }
 
@@ -259,7 +260,6 @@ public class BinaryTree {
     }
 
     public boolean marriedParents() {
-
         if(root == null) {
             return false;
         } else return root.left != null && root.right != null && root.left.info.getMaritalStatus() == 2 && root.right.info.getMaritalStatus() == 2;
